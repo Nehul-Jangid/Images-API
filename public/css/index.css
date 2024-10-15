@@ -1,0 +1,171 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  overflow-x: hidden;
+}
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+}
+.modal-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content:hover {
+  transform: scale(1.5);
+}
+
+.modal-content {
+  cursor: zoom-in;
+  display: block;
+  max-width: 80%; /* Responsive size */
+  max-height: 80%; /* Responsive size */
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+body.modal-open {
+  overflow: hidden;
+}
+img {
+  cursor: pointer;
+  max-width: 30%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 10px 10px;
+  transition: transform 0.2s; /* Smooth transition */
+}
+
+img:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+.portrait {
+  width: auto; /* Keep original width for portrait */
+  height: 100%; /* Make height fill the container */
+}
+
+.landscape {
+  width: 100%; /* Make width fill the container */
+  height: auto; /* Keep original height for landscape */
+}
+
+.container {
+  max-width: 1200px;
+  text-align: center;
+}
+.container img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.navbar {
+  display: flex;
+  background-color: #333; /* Dark background */
+  color: white; /* White text */
+  padding: 10px 100px; /* Vertical padding */
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 24px; /* Logo size */
+  margin: 0; /* Remove margin */
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  justify-content: space-between;
+  list-style: none;
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Center items vertically */
+  width: 25%;
+}
+
+.nav-links li {
+  margin: 0 15px; /* Space between links */
+}
+
+.nav-links a {
+  color: white; /* Link color */
+  text-decoration: none; /* Remove underline */
+}
+
+.nav-links a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+.search-form {
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Center items vertically */
+}
+
+.search-input {
+  padding: 10px; /* Increased padding for input */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  margin-right: 10px; /* Space between input and buttons */
+  width: 200px; /* Set a fixed width */
+  min-width: 150px; /* Minimum width for smaller screens */
+  outline: none;
+}
+
+.search-button,
+.clear-button {
+  padding: 10px 15px; /* Padding for buttons */
+  background-color: #555; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.search-button:hover,
+.clear-button:hover {
+  background-color: #777; /* Darker button on hover */
+}
+
+/* Clear button styles */
+.clear-button {
+  background-color: #e74c3c; /* Red background for clear button */
+}
+
+.clear-button:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}

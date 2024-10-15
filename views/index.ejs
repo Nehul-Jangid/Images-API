@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pexels Images</title>
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <h1 class="logo">Pexels Images</h1>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <form class="search-form" id="searchForm" onsubmit="handleSearch(event)">
+        <input
+          type="text"
+          placeholder="Search..."
+          class="search-input"
+          name="query"
+        />
+        <button type="submit" class="search-button">Search</button>
+      </form>
+    </nav>
+    <div id="imageModal" class="modal" onclick="closeModal()">
+      <span class="close" onclick="closeModal()">✖</span>
+      <div class="modal-image">
+        <img class="modal-content" id="modalImage" />
+      </div>
+    </div>
+    <h1 style="text-align: center; margin: 40px 0">
+      <%= locals.query || "Random Pexels Images" %>
+    </h1>
+    <main class="main">
+      <div class="container">
+        <% if (photos && photos.length > 0) { %> <%
+        photos.forEach(function(photoData) { %>
+        <img
+          src="<%= photoData.src.portrait %>"
+          alt="<%= photoData.alt %>"
+          class="landscape"
+          onclick="openModal('<%= photoData.src.original %>')"
+        />
+        <% }) %> <% } else { %>
+        <p>No photos found</p>
+        <% } %>
+      </div>
+    </main>
+  </body>
+
+  <script>
+    function openModal(imageUrl) {
+      const modal = document.getElementById("imageModal");
+      const modalImage = document.getElementById("modalImage");
+      document.body.classList.add("modal-open");
+      modalImage.src = imageUrl;
+      modal.style.display = "block";
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("imageModal");
+      document.body.classList.remove("modal-open");
+      modal.style.display = "none";
+    }
+
+    let page = 1; // Initialize page number
+    let isLoading = false; // To prevent multiple requests
+
+    window.onscroll = async function () {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        if (!isLoading) {
+          isLoading = true;
+          page++; // Increase page number
+          await loadMoreImages(); // Load more images when bottom is reached
+          isLoading = false;
+        }
+      }
+    };
+
+    async function loadMoreImages() {
+      const query = "<%= locals.query || 'random'%>"; // Get the current search query
+      try {
+        const response = await fetch("/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query: query, page: page }), // Send query and page number
+        });
+
+        const data = await response.json();
+        const photos = data.photos;
+
+        if (photos && photos.length > 0) {
+          const container = document.querySelector(".container");
+
+          photos.forEach(function (photoData) {
+            const img = document.createElement("img");
+            img.src = photoData.src.portrait;
+            img.alt = photoData.alt;
+            img.className = "landscape";
+            img.onclick = () => openModal(photoData.src.original);
+
+            container.appendChild(img); // Append new images to the container
+          });
+        } else {
+          console.log("No more photos found.");
+        }
+      } catch (error) {
+        console.error("Error loading more images:", error);
+      }
+    }
+    async function handleSearch(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      const form = event.target;
+      const query = form.query.value; // Get the search query
+
+      // Reset the page number for new search
+      page = 1;
+
+      try {
+        const response = await fetch("/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query: query, page: page }),
+        });
+
+        const data = await response.json();
+        const photos = data.photos;
+
+        // Clear existing images
+        const container = document.querySelector(".container");
+        container.innerHTML = "";
+
+        if (photos && photos.length > 0) {
+          photos.forEach((photoData) => {
+            const img = document.createElement("img");
+            img.src = photoData.src.portrait;
+            img.alt = photoData.alt;
+            img.className = "landscape";
+            img.onclick = () => openModal(photoData.src.original);
+
+            container.appendChild(img); // Append new images to the container
+          });
+        } else {
+          container.innerHTML = "<p>No photos found</p>";
+        }
+      } catch (error) {
+        console.error("Error loading images:", error);
+      }
+    }
+  </script>
+</html>
